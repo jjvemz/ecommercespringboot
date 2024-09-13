@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name="user")
+@Table(name="CommerceUser")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "CommerceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Address> addresses ;
 
      /**
