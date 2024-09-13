@@ -35,37 +35,24 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @OneToMany(mappedBy = "CommerceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Address> addresses ;
 
-     /**
-   * Gets the addresses.
-   * @return The addresses.
-   */
+
   public List<Address> getAddresses() {
     return addresses;
   }
 
-  /**
-   * Sets the addresses.
-   * @param addresses The addresses.
-   */
+
   public void setAddresses(List<Address> addresses) {
     this.addresses = addresses;
   }
 
-  /**
-   * Gets the last name.
-   * @return The last name.
-   */
   public String getLastName() {
     return lastName;
   }
 
-  /**
-   * Sets the last name.
-   * @param lastName The last name.
-   */
+
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
