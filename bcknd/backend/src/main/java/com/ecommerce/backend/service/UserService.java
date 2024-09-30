@@ -5,6 +5,7 @@ import com.ecommerce.backend.api.model.RegistrationBody;
 import com.ecommerce.backend.exception.UserAlreadyExistsException;
 import com.ecommerce.backend.model.dao.UserDAO;
 
+
 import org.springframework.stereotype.Service;
 
 @Service
