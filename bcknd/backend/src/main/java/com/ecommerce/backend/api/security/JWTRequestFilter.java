@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -24,35 +25,40 @@ import java.util.Optional;
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
  
-    private JWTService M__jwtService;
+    private JWTService jwtService;
 
-    private UserDAO M__UserDao;
+    private UserDAO UserDao;
 
 
     public JWTRequestFilter(JWTService jwtService, UserDAO UserDao){
-        jwtService= M__jwtService;
-        UserDao = M__UserDao;
+        this.jwtService= jwtService;
+        this.UserDao = UserDao;
     }
 
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request, 
+            @NonNull HttpServletResponse response, 
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
+        
         String tokenHeader = request.getHeader("Authorization");
-        if(tokenHeader != null && tokenHeader.startsWith("Bearer ")){
+        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
             String token = tokenHeader.substring(7);
-            try{
-                String UserName = M__jwtService.getUsername(token);
-                Optional<User> optUser = M__UserDao.findByUsernameIgnoreCase(UserName);
-                if(optUser.isPresent()){
+            try {
+                String userName = jwtService.getUsername(token);
+                Optional<User> optUser = UserDao.findByUsernameIgnoreCase(userName);
+                if (optUser.isPresent()) {
                     User currUser = optUser.get();
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(currUser, null, new ArrayList<>());
-                    auth.setDetails( new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken auth = 
+                            new UsernamePasswordAuthenticationToken(currUser, null, new ArrayList<>());
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
-
-            }catch (JWTDecodeException res ){
-                System.out.println(res);
+            } catch (JWTDecodeException e) {
+                System.out.println(e);
             }
         }
+
+        filterChain.doFilter(request, response);
     }
 }
