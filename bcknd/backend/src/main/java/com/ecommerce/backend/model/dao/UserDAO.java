@@ -8,10 +8,7 @@ import java.util.Optional;
  
 public interface UserDAO  extends CrudRepository<User, Long>{
 
-    static Optional<User> findByUsernameIgnoreCase(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByUsernameIgnoreCase'");
-    }
+    Optional<User> findByUsernameIgnoreCase(String username);
 
     Optional<User> findByEmailIgnoreCase(String email);
 

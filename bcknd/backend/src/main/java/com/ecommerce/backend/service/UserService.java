@@ -25,7 +25,7 @@ public class UserService {
 
     public User registerUser(RegistrationBody registrationBody) throws UserAlreadyExistsException{
         if(userDAO.findByEmailIgnoreCase(registrationBody.getEmail()).isPresent()
-            || UserDAO.findByUsernameIgnoreCase(registrationBody.getUsername()).isPresent()){
+            || userDAO.findByUsernameIgnoreCase(registrationBody.getUsername()).isPresent()){
                 throw new UserAlreadyExistsException();
             }
             User user = new User();
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public String loginUser(LoginBody loginBody){
-        Optional<User> opUser = UserDAO.findByUsernameIgnoreCase(loginBody.getUsername());
+        Optional<User> opUser = userDAO.findByUsernameIgnoreCase(loginBody.getUsername());
         if(opUser.isPresent())
         {
             User user = opUser.get();
